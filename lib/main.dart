@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_unit_zheng/global.dart';
+import 'package:flutter_unit_zheng/router/router.dart';
+import 'package:flutter_unit_zheng/router/router_config.dart';
+import 'package:flutter_unit_zheng/utils/util.dart';
+import 'package:flutter_unit_zheng/widget/screen/flutter_screenutil.dart';
 
 void main() {
-  runApp(const MyApp());
+  GlobalRegister.init().then((value) {
+    // 初始化路由系统
+    AppRouter.instance.init(
+      debugLogDiagnostics: true, // 开发模式下开启路由日志
+      routes: rootRoutes,
+    );
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -9,14 +21,38 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      child: MaterialApp.router(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // 页面背景设置白色
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: "Poppins",
+          primarySwatch: Colors.blue,
+          useMaterial3: true,
+        ),
+        routerConfig: AppRouter.instance.router,
+        locale: const Locale('zh', 'CN'),
+        debugShowCheckedModeBanner: false,
+        builder: (context, widget) {
+          return MediaQuery(
+            ///设置文字大小不随系统设置改变
+            data: MediaQuery.of(context).copyWith(
+              textScaler: const TextScaler.linear(1.0),
+            ),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => Utils.dismissKeyboard(context),
+                  child: widget!,
+                ),
+              ],
+            ),
+          );
+        },
       ),
-      debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
