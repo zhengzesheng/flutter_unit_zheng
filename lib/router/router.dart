@@ -3,7 +3,7 @@
 library Router;
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_unit_zheng/global.dart';
+import 'package:flutter_unit_zheng/common/global.dart';
 import 'package:flutter_unit_zheng/widget/error_page.dart';
 import 'package:go_router/go_router.dart';
 

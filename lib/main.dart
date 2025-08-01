@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_unit_zheng/global.dart';
 import 'package:flutter_unit_zheng/router/router.dart';
 import 'package:flutter_unit_zheng/router/router_config.dart';
 import 'package:flutter_unit_zheng/utils/util.dart';
 import 'package:flutter_unit_zheng/widget/screen/flutter_screenutil.dart';
+
+import 'common/global.dart';
 
 void main() {
   GlobalRegister.init().then((value) {
