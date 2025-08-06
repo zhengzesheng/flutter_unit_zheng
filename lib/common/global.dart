@@ -34,11 +34,5 @@ class GlobalRegister {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-
-    // 锁定竖屏
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
   }
 }

@@ -68,40 +68,94 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  int _selectedIndex = 0;
+  static const List<Widget> _pages = [
+    Center(child: Text('Home Page')),
+    Center(child: Text('Favorites Page')),
+    Center(child: Text('Settings Page')),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool wide = constraints.maxWidth >= 600.w;
+        return Scaffold(
+          body: Row(
+            children: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) =>
+                    FadeTransition(opacity: animation, child: child),
+                child: wide
+                    ? NavigationRail(
+                        key: const ValueKey('rail'),
+                        selectedIndex: _selectedIndex,
+                        onDestinationSelected: (index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                        labelType: NavigationRailLabelType.all,
+                        leading: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: FlutterLogo(size: 40),
+                        ),
+                        destinations: const [
+                          NavigationRailDestination(
+                            icon: Icon(Icons.home_outlined),
+                            selectedIcon: Icon(Icons.home),
+                            label: Text('Home'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.favorite_border),
+                            selectedIcon: Icon(Icons.favorite),
+                            label: Text('Favorites'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.settings_outlined),
+                            selectedIcon: Icon(Icons.settings),
+                            label: Text('Settings'),
+                          ),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              Expanded(child: _pages[_selectedIndex])
+            ],
+          ),
+          bottomNavigationBar: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+            child: wide
+                ? const SizedBox.shrink()
+                : BottomNavigationBar(
+                    key: const ValueKey('bottom'),
+                    currentIndex: _selectedIndex,
+                    onTap: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.favorite),
+                        label: 'Favorites',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.settings),
+                        label: 'Settings',
+                      ),
+                    ],
+                  ),
+          ),
+        );
+      },
     );
   }
 }

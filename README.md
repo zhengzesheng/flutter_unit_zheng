@@ -8,3 +8,10 @@ A new Flutter project.
 > 网络管理：Dio
 > 状态管理：riverpod
 > 国际化：intl
+
+> 高德地图
+> 蓝牙功能
+> 音频播放
+> 实时通讯
+> K线图
+> webSocket
